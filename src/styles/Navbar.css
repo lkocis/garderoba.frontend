@@ -1,0 +1,45 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #161515;  
+  padding: 10px 20px;
+  position: fixed;         
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  color: white;
+  height: 50px;
+}
+
+.navbar-logo {
+     border-left: 20px;
+  display: flex;
+  align-items: center;  /* vertikalno centriraj */
+}
+
+.logo-image {
+  height: 60px;      /* ili koliko želiš, da ne bude preveliko */
+  width: auto;
+  display: block;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar-links li a:hover,
+.navbar-links li a.active {
+  color: #9e0529;  /* yellow highlight */
+}
