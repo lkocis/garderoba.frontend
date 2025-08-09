@@ -35,9 +35,9 @@ const Signup = () => {
       });
 
       console.log('Signup success:', response.data);
-      navigate('/login'); // preusmeri na login stranicu
+      navigate('/login'); 
+      window.location.href = '/login';
     } catch (err) {
-      // Axios error može imati odgovor u err.response.data
       const message = err.response?.data || err.message || 'Signup failed';
       setError(message);
       console.error(message);

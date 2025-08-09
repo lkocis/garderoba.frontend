@@ -41,7 +41,6 @@ const Profile = () => {
     try {
       const token = localStorage.getItem('token');
 
-      // Šaljemo cijeli objekt + ID da backend prođe provjeru
       const payload = {
         ...user,
         id: userId,
@@ -58,7 +57,6 @@ const Profile = () => {
         }
       );
 
-      // Update state lokalno
       setUser(prevUser => ({
         ...prevUser,
         [fieldName]: newValue
