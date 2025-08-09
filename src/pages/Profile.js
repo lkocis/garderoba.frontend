@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import '../styles/Profile.css';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
-  // Dohvati userId iz localStorage
   const userId = localStorage.getItem('userid');
 
   useEffect(() => {
@@ -15,41 +16,93 @@ const Profile = () => {
 
     async function fetchUser() {
       try {
-        const token = localStorage.getItem('token'); // ako ti treba token za autorizaciju
+        const token = localStorage.getItem('token'); 
 
-        const response = await fetch(`https://localhost:7027/User/ReadUser/${userId}`, {
+        const response = await axios.get(`https://localhost:7027/User/ReadUser/${userId}`, {
           headers: {
-            'Authorization': `Bearer ${token}`, // šalješ token ako endpoint traži autorizaciju
+            Authorization: `Bearer ${token}`
           }
         });
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch user data');
-        }
-
-        const data = await response.json();
-        setUser(data);
+        setUser(response.data);
       } catch (err) {
-        setError(err.message);
+        const message = err.response?.data || err.message || 'Failed to fetch user data';
+        setError(message);
       }
     }
 
     fetchUser();
   }, [userId]);
 
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  const updateUserInfo = async (fieldName) => {
+    const newValue = prompt(`Unesi novi podatak za ${fieldName}:`, user[fieldName]);
+    if (newValue === null || newValue === user[fieldName]) return;
 
+    try {
+      const token = localStorage.getItem('token');
+
+      // Šaljemo cijeli objekt + ID da backend prođe provjeru
+      const payload = {
+        ...user,
+        id: userId,
+        [fieldName]: newValue
+      };
+
+      await axios.put(
+        `https://localhost:7027/User/UpdateUserById/${userId}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      // Update state lokalno
+      setUser(prevUser => ({
+        ...prevUser,
+        [fieldName]: newValue
+      }));
+    } catch (err) {
+      alert('Failed to update user info.');
+    }
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    window.location.href = '/login'; 
+  };
+
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
   if (!user) return <p>Loading...</p>;
 
+  const renderEditableRow = (label, fieldName) => (
+    <p>
+      <strong>{label}:</strong> {user[fieldName]}{' '}
+      <span
+        style={{ cursor: 'pointer' }}
+        role="button"
+        aria-label={`Edit ${label}`}
+        onClick={() => updateUserInfo(fieldName)}
+        title={`Edit ${label}`}
+      >
+        ✏️
+      </span>
+    </p>
+  );
+
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto' }}>
+    <div className='profile-container'>
       <h2>User Profile</h2>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>First Name:</strong> {user.firstName}</p>
-      <p><strong>Last Name:</strong> {user.lastName}</p>
-      <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
-      <p><strong>Area:</strong> {user.area}</p>
-      <p><strong>KUD Name:</strong> {user.kudName}</p>
+      <div className="info-box">
+        {renderEditableRow('Email', 'email')}
+        {renderEditableRow('First Name', 'firstName')}
+        {renderEditableRow('Last Name', 'lastName')}
+        {renderEditableRow('Phone Number', 'phoneNumber')}
+        {renderEditableRow('Area', 'area')}
+        {renderEditableRow('KUD Name', 'kudName')}
+      </div>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 };

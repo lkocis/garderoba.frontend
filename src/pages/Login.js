@@ -1,13 +1,16 @@
 import '../styles/Login.css'; 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import logo from '../assets/login-logo.png';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ 
@@ -21,23 +24,19 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('https://localhost:7027/User/Login', { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      const response = await axios.post('https://localhost:7027/User/Login', formData, {
+        headers: { 'Content-Type': 'application/json' }
       });
 
-      if (!response.ok) {
-        throw new Error('Invalid login credentials');
-      }
+      console.log('Login success:', response.data);
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userid', response.data.userid);
 
-      const data = await response.json();
-      console.log('Login success:', data);
-      localStorage.setItem('token', data.token);
-
+      navigate('/');
       window.location.href = '/';
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      const message = error.response?.data || error.message || 'Invalid login credentials';
+      setError(message);
     }
   };
 
