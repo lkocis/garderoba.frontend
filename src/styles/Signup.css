@@ -1,0 +1,84 @@
+.signup-container {
+  position: relative;
+  height: 100vh;
+  background-image: url('../assets/background.JPG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  z-index: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  text-align: center;
+  font-size: 30px;
+}
+
+.signup-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(35, 34, 34, 0.632);
+  z-index: 1;
+}
+
+.login-logo {
+  width: 300px;
+  height: 150px;
+  position: relative;
+  z-index: 2;
+}
+
+.login-image {
+    position: relative;
+    height: 250px;
+    width: 250px;
+}
+
+form h2{
+    color: hsl(0, 0%, 100%);
+    text-shadow: 7px 7px 9px rgba(0, 0, 0, 0.648);
+    border-top: 10px;
+    border-bottom: 10px;
+}
+
+form {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  max-width: 350px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.484);
+}
+
+input::placeholder {
+  color: rgb(62, 60, 60); 
+  opacity: 1; 
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 1.1rem;
+  background-color: #a19527ad;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  position: inherit;
+}

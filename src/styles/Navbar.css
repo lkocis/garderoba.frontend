@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #161515;  
+  background-color: #484545;
   padding: 10px 20px;
   position: fixed;         
   top: 0;
@@ -14,13 +14,13 @@
 }
 
 .navbar-logo {
-     border-left: 20px;
+  border-left: 50px;
   display: flex;
-  align-items: center;  /* vertikalno centriraj */
+  align-items: center;
 }
 
 .logo-image {
-  height: 60px;      /* ili koliko želiš, da ne bude preveliko */
+  height: 65px;
   width: auto;
   display: block;
 }
@@ -41,5 +41,6 @@
 
 .navbar-links li a:hover,
 .navbar-links li a.active {
-  color: #9e0529;  /* yellow highlight */
+  color: #a19527;
+    /* yellow highlight */
 }

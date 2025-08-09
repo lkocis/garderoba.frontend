@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Navbar.css'; 
 import logo from '../assets/logo.png'
 
-const Navbar = () => {
+const AuthenticatedNavbar = () => {
   const navigate = useNavigate();
 
   return (
@@ -12,11 +12,12 @@ const Navbar = () => {
       </div>
       <ul className="navbar-links">
         <li><a onClick={() => navigate('/')}>Home</a></li>
-        <li><a onClick={() => navigate('/login')}>Login</a></li>
-        <li><a onClick={() => navigate('/signup')}>Sign up</a></li>
+        <li><a onClick={() => navigate('/inventory')}>Inventory</a></li>
+        <li><a onClick={() => navigate('/allChoreos')}>My choreographies</a></li>
+        <li><a onClick={() => navigate('/profile')}>Profile</a></li>
       </ul>
     </nav>
   );
 };
 
-export default Navbar;
+export default AuthenticatedNavbar;
