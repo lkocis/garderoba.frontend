@@ -6,7 +6,8 @@ import Signup from '../src/pages/Signup';
 import Navbar from './components/Navbar';
 import Profile from '../src/pages/Profile';
 import Inventory from '../src/pages/Inventory';
-import MyChoreographies from '../src/pages/MyChoreographies';
+import Choreographies from '../src/pages/Choreographies';
+import Costumes from './pages/Costumes';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import AuthenticatedNavbar from './components/AuthenticatedNavbar';
@@ -29,7 +30,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/inventory" element={<Inventory />} />
-        <Route path="/allChoreos" element={<MyChoreographies />} />
+        <Route path="/allChoreos" element={<Choreographies />} />
+        <Route path="/costumes/:userId/:choreographyId" element={<Costumes />} />
       </Routes>
     </>
   );

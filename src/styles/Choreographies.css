@@ -1,0 +1,94 @@
+.page-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  margin-top: 60px;
+  position: relative;
+  height: 100vh;
+  background-image: url('../assets/background.JPG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  z-index: 0;
+}
+
+.page-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(35, 34, 34, 0.632);
+  z-index: 1;
+}
+
+.left-panel {
+  position: relative;
+  z-index: 2;
+  flex: 1; 
+  overflow-y: auto;  
+  max-height: calc(100vh - 80px); 
+  padding-right: 10px;
+}
+
+.right-panel {
+  position: relative;
+  z-index: 2;
+  width: 400px; 
+  background-color: rgba(104, 101, 107, 0.653);
+  padding: 50px;
+  border-radius: 8px;
+  align-items: center;
+  height: 500px;
+}
+
+.choreo-card {
+  position: relative;
+  border: 1px solid rgba(104, 101, 107, 0.653);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: rgba(104, 101, 107, 0.653);
+  transition: background-color 0.3s ease;
+  z-index: 2;
+}
+
+.choreo-card.selected {
+  background-color: rgba(139, 137, 141, 0.653);
+}
+
+.error-message {
+  color: red;
+  position: relative;
+  z-index: 2;
+}
+
+.costume-card {
+  border: 1px solid rgba(104, 101, 107, 0.653);
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: rgba(104, 101, 107, 0.653);
+  z-index: 2;
+}
+
+.costume-card.selected {
+  background-color: rgba(139, 137, 141, 0.653);
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+  color: rgb(255, 255, 255);
+}
+
+.content-wrapper h2, h3 {
+  position: relative;
+  z-index: 2;
+  color: white;
+}
+
+.costumes-section {
+  position: relative;
+  z-index: 2;
+}
