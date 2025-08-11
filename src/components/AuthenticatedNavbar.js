@@ -15,6 +15,7 @@ const AuthenticatedNavbar = () => {
         <li><a onClick={() => navigate('/costumeComponents')}>Costume Components</a></li>
         <li><a onClick={() => navigate('/allChoreos')}>Choreographies/Inventory</a></li>
         <li><a onClick={() => navigate('/profile')}>Profile</a></li>
+        <li><a onClick={() => navigate('/performance')}>Performance</a></li>
       </ul>
     </nav>
   );

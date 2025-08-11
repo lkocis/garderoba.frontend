@@ -9,6 +9,8 @@ import CostumeComponents from './pages/CostumeComponents';
 import Choreographies from '../src/pages/Choreographies';
 import Costumes from './pages/Costumes';
 import CostumeParts from './pages/CostumeParts';
+import Performance from './pages/Performance';
+import CostumeCalculator from './pages/CostumeCalculator';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import AuthenticatedNavbar from './components/AuthenticatedNavbar';
@@ -34,6 +36,8 @@ function App() {
         <Route path="/allChoreos" element={<Choreographies />} />
         <Route path="/costumes/:userId/:choreographyId" element={<Costumes />} />
         <Route path="/costumeParts/:userId/:costumeId" element={<CostumeParts />} />
+        <Route path="/performance" element={<Performance />} />
+        <Route path="/costume-calculator/:userId/:choreographyId" element={<CostumeCalculator />} />
       </Routes>
     </>
   );
