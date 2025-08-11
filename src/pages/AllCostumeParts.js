@@ -3,7 +3,7 @@ import React from "react";
 const AllCostumeParts = ({ costumeParts }) => {
   return (
     <div className="content-wrapper">
-      <h2>Costume parts</h2>
+      <h2>My Costume parts for selected choreography</h2>
       {costumeParts.length === 0 ? (
         <p>There are no costume parts for this choreography.</p>
       ) : (

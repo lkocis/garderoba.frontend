@@ -76,7 +76,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         </label>
 
         <label>
-          Sex:
+          Gender:
           <select name="gender" value={formData.gender} onChange={handleInputChange} required>
             <option value="">Odaberi</option>
             <option value="0">Men</option>
@@ -96,7 +96,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         <br /><br />
 
         <label>
-          Necessary Parts:
+          Necessary Parts (Copy from Costume components tab!):
           <input type="text" name="necessaryParts" value={formData.necessaryParts} onChange={handleInputChange} />
         </label>
 

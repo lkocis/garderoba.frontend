@@ -1,0 +1,46 @@
+.necessary-container {
+  display: flex;
+  flex-direction: column; 
+  gap: 20px;
+  padding: 20px;
+  margin-top: 60px;
+  position: relative;
+  height: 100vh;
+  background-image: url('../assets/background.JPG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  z-index: 0;
+}
+
+.necessary-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(35, 34, 34, 0.632);
+  z-index: 1;
+}
+
+.necessary-card {
+  width: 100%; 
+  border: 1px solid rgba(104, 101, 107, 0.653);
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  background-color: rgba(104, 101, 107, 0.653);
+  z-index: 2;
+  padding-left: 8px;
+  font-size: larger;
+}
+
+.cards-container {
+    margin-right: 15px;
+    z-index: 2;
+    position: relative;
+}
+
+h2 {
+    z-index: 2;
+    position: relative;
+}

@@ -33,7 +33,7 @@ const Costumes = () => {
     <div className="page-container">
       <div className="left-panel">
         {error && <p className="error-message">{error}</p>}
-        <h2>All Costumes</h2>
+        <h2>My Costumes for selected choreography</h2>
         <ul>
           {costumes.map((co) => (
             <li
@@ -44,7 +44,7 @@ const Costumes = () => {
             >
               <p><strong>Name:</strong> {co.name}</p>
               <p><strong>Area:</strong> {co.area}</p>
-              <p><strong>Sex:</strong> {co.gender}</p>
+              <p><strong>Gender:</strong> {co.gender}</p>
               <p><strong>Status:</strong> {co.status}</p>
             </li>
           ))}

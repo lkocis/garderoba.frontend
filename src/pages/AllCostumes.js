@@ -12,7 +12,7 @@ const AllCostumeParts = ({ costumes, selectedId, onSelect}) => {
         >
           <p><strong>Name:</strong> {cost.name}</p>
           <p><strong>Area:</strong> {cost.area}</p>
-          <p><strong>Sex:</strong> {cost.gender === 0 ? "Men" : "Women"}</p>
+          <p><strong>Gender:</strong> {cost.gender === 0 ? "Men" : "Women"}</p>
           <p><strong>Status:</strong> {cost.status}</p>
         </div>
       ))}

@@ -5,7 +5,7 @@ import Login from '../src/pages/Login';
 import Signup from '../src/pages/Signup';
 import Navbar from './components/Navbar';
 import Profile from '../src/pages/Profile';
-import Inventory from '../src/pages/Inventory';
+import CostumeComponents from './pages/CostumeComponents';
 import Choreographies from '../src/pages/Choreographies';
 import Costumes from './pages/Costumes';
 import CostumeParts from './pages/CostumeParts';
@@ -30,7 +30,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/costumeComponents" element={<CostumeComponents />} />
         <Route path="/allChoreos" element={<Choreographies />} />
         <Route path="/costumes/:userId/:choreographyId" element={<Costumes />} />
         <Route path="/costumeParts/:userId/:costumeId" element={<CostumeParts />} />

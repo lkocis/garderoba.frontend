@@ -29,7 +29,7 @@ const CostumeParts = () => {
     <div className="page-container">
       <div className="left-panel">
         {error && <p className="error-message">{error}</p>}
-        <h2>All costume parts</h2>
+        <h2>My costume parts for selected costumes</h2>
         <ul>
           {costumeParts.map((cp) => (
             <li
