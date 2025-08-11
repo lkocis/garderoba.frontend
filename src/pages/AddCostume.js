@@ -36,7 +36,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         gender: parseInt(formData.gender),
         status: parseInt(formData.status),
         necessaryParts: formData.necessaryParts,
-        choreographyId: choreographyId  // iz props, ili možeš ukloniti ako ne trebaš
+        choreographyId: choreographyId  
       };
 
       const response = await axios.post(

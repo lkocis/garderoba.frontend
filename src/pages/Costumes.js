@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import AllCostumes from "./AllCostumes";
 import AddCostume from "./AddCostume";
 import "../styles/Costumes.css";
 
@@ -25,12 +24,9 @@ const Costumes = () => {
     fetchCostumes();
   }, [userId, choreographyId, token]);
 
-  const handleAddCostume = (newCostume) => {
-    setCostumes((prev) => [...prev, newCostume]);
-  };
 
   const handleCostumeClick = (costumeId) => {
-    navigate(`/costumeParts/${costumeId}/${userId}`);
+    navigate(`/costumeParts/${userId}/${costumeId}`);
   };
 
   return (
@@ -39,23 +35,23 @@ const Costumes = () => {
         {error && <p className="error-message">{error}</p>}
         <h2>All Costumes</h2>
         <ul>
-          {costumes.map((ch) => (
+          {costumes.map((co) => (
             <li
-              key={ch.id}
+              key={co.id}
               className="choreo-card"
-              onClick={() => handleCostumeClick(ch.id)}
+              onClick={() => handleCostumeClick(co.id)}
               style={{ cursor: "pointer" }}
             >
-              <p><strong>Name:</strong> {ch.name}</p>
-              <p><strong>Area:</strong> {ch.area}</p>
-              <p><strong>Sex:</strong> {ch.gender}</p>
-              <p><strong>Status:</strong> {ch.status}</p>
+              <p><strong>Name:</strong> {co.name}</p>
+              <p><strong>Area:</strong> {co.area}</p>
+              <p><strong>Sex:</strong> {co.gender}</p>
+              <p><strong>Status:</strong> {co.status}</p>
             </li>
           ))}
         </ul>
       </div>
       <div className="right-panel">
-        <AddCostume choreographyId={choreographyId} onAdded={handleAddCostume} />
+        <AddCostume choreographyId={choreographyId} onAdded={fetchCostumes} />
       </div>
     </div>
   );

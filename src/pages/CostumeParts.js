@@ -1,54 +1,51 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import AddCostumeParts from "../pages/AddCostumeParts";
 import "../styles/ChoreographiesCostume.css";
+import { useParams } from "react-router-dom";
 
 const CostumeParts = () => {
   const [costumeParts, setCostumeParts] = useState([]);
   const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userid");
-  const navigate = useNavigate();
+  const { userId, costumeId } = useParams();
+  const [ error, setError ] = useState("");
+
+  console.log("userId", userId, "costumeId", costumeId);
 
   const fetchCostumeParts = () => {
     axios
-      .get("https://localhost:7027/Costume/GetAllCostumeParts/{$costumeId}/{$userId}", {
+      .get(`https://localhost:7027/Costume/GetAllCostumeParts/${userId}/${costumeId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      .then((res) => setCostumeParts(res.data))
-      .catch((err) => console.error(err));
+      .then((response) => setCostumeParts(response.data))
+      .catch(() => setError("Greška prilikom dohvaćanja kostima."));
   };
 
   useEffect(() => {
-    fetchCostumeParts();
-  }, []);
-
-  const handleCostumeClick = (costumeId) => {
-    navigate(`/costumeParts/${costumeId}/${userId}`);
-  };
+      fetchCostumeParts();
+    }, [userId, costumeId, token]);
 
   return (
     <div className="page-container">
       <div className="left-panel">
+        {error && <p className="error-message">{error}</p>}
         <h2>All costume parts</h2>
         <ul>
-          {costumeParts.map((ch) => (
+          {costumeParts.map((cp) => (
             <li
-              key={ch.id}
+              key={cp.id}
               className="choreo-card"
-              onClick={() => handleCostumeClick(ch.id)}
-              style={{ cursor: "pointer" }}
             >
-              <p><strong>Region:</strong> {ch.region}</p>
-              <p><strong>Name:</strong> {ch.name}</p>
-              <p><strong>Part number:</strong> {ch.partNumber}</p>
-              <p><strong>Status:</strong> {ch.status}</p>
+              <p><strong>Region:</strong> {cp.region}</p>
+              <p><strong>Name:</strong> {cp.name}</p>
+              <p><strong>Part number:</strong> {cp.partNumber}</p>
+              <p><strong>Status:</strong> {cp.status}</p>
             </li>
           ))}
         </ul>
       </div>
       <div className="right-panel">
-        <AddCostumeParts onAdded={fetchCostumeParts} />
+        <AddCostumeParts costumeId={costumeId} onAdded={fetchCostumeParts} />
       </div>
     </div>
   );

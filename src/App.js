@@ -33,7 +33,7 @@ function App() {
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/allChoreos" element={<Choreographies />} />
         <Route path="/costumes/:userId/:choreographyId" element={<Costumes />} />
-        <Route path="/costumeParts/:costumeId/:userId" element={<CostumeParts />} />
+        <Route path="/costumeParts/:userId/:costumeId" element={<CostumeParts />} />
       </Routes>
     </>
   );

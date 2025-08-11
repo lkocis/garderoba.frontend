@@ -1,23 +1,23 @@
 import React from "react";
 
-const CostumesSection = ({ costumes }) => {
+const AllCostumeParts = ({ costumes, selectedId, onSelect}) => {
   return (
     <div className="costumes-section">
       <h2>Costumes</h2>
-      {costumes.length === 0 ? (
-        <p>There are no costumes for this choreography.</p>
-      ) : (
-        costumes.map((costume) => (
-          <div key={costume.Id} className="costume-card">
-            <p><strong>Name:</strong> {costume.name}</p>
-            <p><strong>Area:</strong> {costume.area}</p>
-            <p><strong>Sex:</strong> {costume.gender === 0 ? "Men" : "Women"}</p>
-            <p><strong>Status:</strong> {costume.status}</p>
-          </div>
-        ))
-      )}
+      {costumes.map((cost) => (
+        <div
+          key={cost.id}
+          className={`costume-card ${selectedId === cost.id ? "selected" : ""}`}
+          onClick={() => onSelect(cost.id)}
+        >
+          <p><strong>Name:</strong> {cost.name}</p>
+          <p><strong>Area:</strong> {cost.area}</p>
+          <p><strong>Sex:</strong> {cost.gender === 0 ? "Men" : "Women"}</p>
+          <p><strong>Status:</strong> {cost.status}</p>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default CostumesSection;
+export default AllCostumeParts;

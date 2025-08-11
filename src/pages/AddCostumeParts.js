@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const AddCostume = ({ onAdded, choreographyId }) => {
+const AddCostumeParts = ({ onAdded, costumeId }) => {
   const [formData, setFormData] = useState({
+    region: "",
     name: "",
-    area: "",
-    gender: "",       
-    status: "",       
-    necessaryParts: ""
+    partNumber: "",       
+    status: ""
   });
 
   const [error, setError] = useState("");
@@ -24,35 +23,28 @@ const AddCostume = ({ onAdded, choreographyId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.gender || !formData.status) {
-      setError("Fill in necessary fields: name, sex and status.");
-      return;
-    }
-
     try {
       const payload = {
+        region: formData.region,
         name: formData.name,
-        area: formData.area,
-        gender: parseInt(formData.gender),
+        partNumber: formData.partNumber,
         status: parseInt(formData.status),
-        necessaryParts: formData.necessaryParts,
-        choreographyId: choreographyId  // iz props, ili možeš ukloniti ako ne trebaš
+        costumeId: costumeId
       };
 
       const response = await axios.post(
-        "https://localhost:7027/Costume/CreateCostume",
+        `https://localhost:7027/Costume/AddCostumePart`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       if (onAdded) onAdded(response.data);
       setFormData({
+        region: "",
         name: "",
-        area: "",
-        gender: "",
+        partNumber: "",
         status: "",
-        necessaryParts: "",
-        choreographyId: ""
+        costumeId: ""
       });
       setError("");
     } catch (err) {
@@ -62,26 +54,22 @@ const AddCostume = ({ onAdded, choreographyId }) => {
 
   return (
     <div>
-      <h2>Add costume</h2>
+      <h2>Add costume part</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>
+          Body Region:
+          <input type="text" name="region" value={formData.region} onChange={handleInputChange} required />
+        </label>
+
+        <label>
           Name:
-          <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
+          <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
         </label>
 
         <label>
-          Area:
-          <input type="text" name="area" value={formData.area} onChange={handleInputChange} />
-        </label>
-
-        <label>
-          Sex:
-          <select name="gender" value={formData.gender} onChange={handleInputChange} required>
-            <option value="">Odaberi</option>
-            <option value="0">Men</option>
-            <option value="1">Women</option>
-          </select>
+          Part number:
+          <input type="text" name="partNumber" value={formData.partNumber} onChange={handleInputChange} />
         </label>
         <br /><br />
 
@@ -93,13 +81,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
             <option value="1">SomeMissing</option>
           </select>
         </label>
-        <br /><br />
-
-        <label>
-          Necessary Parts:
-          <input type="text" name="necessaryParts" value={formData.necessaryParts} onChange={handleInputChange} />
-        </label>
-
+        
         <br /><br />
         <button type="submit">Add costume part</button>
       </form>
@@ -107,4 +89,4 @@ const AddCostume = ({ onAdded, choreographyId }) => {
   );
 };
 
-export default AddCostume;
+export default AddCostumeParts;
