@@ -8,7 +8,7 @@ const AllCostumeParts = ({ costumeParts }) => {
         <p>There are no costume parts for this choreography.</p>
       ) : (
         costumeParts.map((cosPa) => (
-          <div key={cosPa.Id} className="costume-card">
+          <div key={cosPa.id} className="costume-card">
             <p><strong>Region:</strong> {cosPa.region}</p>
             <p><strong>Name:</strong> {cosPa.name}</p>
             <p><strong>Part number:</strong> {cosPa.partNumber}</p>

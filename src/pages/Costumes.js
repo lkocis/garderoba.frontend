@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { FaTrash } from "react-icons/fa"; // <-- using FaTrash
 import AddCostume from "./AddCostume";
 import "../styles/Costumes.css";
 
@@ -24,9 +25,23 @@ const Costumes = () => {
     fetchCostumes();
   }, [userId, choreographyId, token]);
 
-
   const handleCostumeClick = (costumeId) => {
     navigate(`/costumeParts/${userId}/${costumeId}`);
+  };
+
+  const handleDeleteCostume = (e, costumeId) => {
+    e.stopPropagation(); // prevent triggering the click on the card
+    if (!window.confirm("Are you sure you want to delete this costume?")) return;
+
+    axios
+      .delete(`https://localhost:7027/Costume/DeleteCostumeWithParts/${costumeId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => fetchCostumes())
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to delete costume.");
+      });
   };
 
   return (
@@ -40,12 +55,26 @@ const Costumes = () => {
               key={co.id}
               className="choreo-card"
               onClick={() => handleCostumeClick(co.id)}
-              style={{ cursor: "pointer" }}
+              style={{ position: "relative", cursor: "pointer" }}
             >
               <p><strong>Name:</strong> {co.name}</p>
               <p><strong>Area:</strong> {co.area}</p>
               <p><strong>Gender:</strong> {co.gender}</p>
               <p><strong>Status:</strong> {co.status}</p>
+
+              {/* Trash can icon */}
+              <FaTrash
+                onClick={(e) => handleDeleteCostume(e, co.id)}
+                style={{
+                  position: "absolute",
+                  bottom: "10px",
+                  right: "10px",
+                  color: "red",
+                  cursor: "pointer",
+                  fontSize: "1.2rem",
+                }}
+                title="Delete Costume"
+              />
             </li>
           ))}
         </ul>

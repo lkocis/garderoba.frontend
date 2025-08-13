@@ -24,7 +24,7 @@ const AddChoreography = ({ onAdded }) => {
     e.preventDefault();
 
     axios
-      .post("https://localhost:7027/Choreography/Create", formData, {
+      .post("https://localhost:7027/Choreography/CreateChoreography", formData, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => {

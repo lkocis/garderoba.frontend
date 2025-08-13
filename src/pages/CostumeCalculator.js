@@ -1,60 +1,91 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // added useNavigate
+import AxiosInstance from "../components/AxiosInstance"; 
+import '../styles/CostumeCalculator.css';
 
 const CostumeCalculator = () => {
-  const { choreographyId } = useParams(); 
-  const token = localStorage.getItem("token");
+  const { choreographyId } = useParams();
+  const navigate = useNavigate(); // initialize navigate
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [allPartsAvailable, setAllPartsAvailable] = useState(null);
   const [missingParts, setMissingParts] = useState([]);
+  const [usersWithParts, setUsersWithParts] = useState([]);
 
   useEffect(() => {
     if (!choreographyId) return;
 
-    setLoading(true);
-    setError(null);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    axios
-      .get(`https://localhost:7027/Performance/GetMaleCostumeChoreographyCheck/${choreographyId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(res => {
-        setAllPartsAvailable(res.data.allPartsAvailable);
-        setMissingParts(res.data.missingParts);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.response?.data?.message || "Došlo je do greške pri dohvaćanju podataka.");
-        setLoading(false);
-      });
-  }, [choreographyId, token]);
+        const costumeCheckRes = await AxiosInstance.get(
+          `/Performance/GetCostumeChoreographyCheck/${choreographyId}`
+        );
+        setAllPartsAvailable(costumeCheckRes.data.allPartsAvailable);
+        setMissingParts(costumeCheckRes.data.missingParts);
 
-  if (loading) return <p>Učitavanje podataka...</p>;
-  if (error) return <p style={{ color: "red" }}>Greška: {error}</p>;
+        const colaborativeRes = await AxiosInstance.get(
+          `/ColaborativeFiltering/GetUserWithCostumeParts/${choreographyId}`
+        );
+        setUsersWithParts(Object.keys(colaborativeRes.data));
+
+      } catch (err) {
+        setError(
+          err.response?.data?.message ||
+            "An error occurred while fetching data."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [choreographyId]);
+
+  if (loading) return <p>Loading data...</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
-    <div>
-      <h1>Provjera dijelova kostima za koreografiju</h1>
-      {allPartsAvailable ? (
-        <p style={{ color: "green" }}>Svi potrebni dijelovi kostima su dostupni.</p>
-      ) : (
-        <>
-          <p style={{ color: "red" }}>Nedostaju neki dijelovi kostima:</p>
-          <ul>
-            {missingParts
-                .filter(part => part.partNumber !== 0)
+    <div className="calculator-container">
+      <h1>Costume Parts Check for Choreography</h1>
+
+      <div className="calculator-card">
+        {allPartsAvailable ? (
+          <h2>All required costume parts are available.</h2>
+        ) : (
+          <>
+            <h2>Some costume parts are missing:</h2>
+            <ul>
+              {missingParts
+                ?.filter((part) => part.partNumber !== 0)
                 .map((part, index) => (
-                    <div key={index}>
-                    <p>Name: {part.name}</p>
-                    <p>Part Number: {part.partNumber}</p>
-                    <p>Gender: {part.gender}</p>
-                    </div>
+                  <li key={index}>
+                    <p><b>Name:</b> {part.name}</p>
+                    <p><b>Quantity:</b> {part.partNumber}</p>
+                    <p><b>Gender:</b> {part.gender}</p>
+                  </li>
                 ))}
-          </ul>
-        </>
-      )}
+            </ul>
+          </>
+        )}
+
+        {usersWithParts.length > 0 && (
+          <div>
+            <h2>Users Who Have the Needed Parts</h2>
+            <ul>
+              {usersWithParts.map((email, idx) => (
+                <li key={idx}>{email}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Back to Home button */}
+        <button onClick={() => navigate("/")}>Back to Home</button>
+      </div>
     </div>
   );
 };
