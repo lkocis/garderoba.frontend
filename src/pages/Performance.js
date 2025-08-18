@@ -15,7 +15,13 @@ const Performance = () => {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((res) => setChoreographies(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+      console.error(err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem("token"); 
+        navigate("/login"); 
+      }
+    });
   };
 
   useEffect(() => {

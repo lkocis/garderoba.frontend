@@ -48,7 +48,7 @@ const AddCostumeParts = ({ onAdded, costumeId }) => {
       });
       setError("");
     } catch (err) {
-      setError("Greška prilikom dodavanja kostima.");
+      setError("Error while adding costume part.");
     }
   };
 
@@ -76,7 +76,7 @@ const AddCostumeParts = ({ onAdded, costumeId }) => {
         <label>
           Status:
           <select name="status" value={formData.status} onChange={handleInputChange} required>
-            <option value="">Odaberi</option>
+            <option value="">Choose</option>
             <option value="0">AllAvailable</option>
             <option value="1">SomeMissing</option>
           </select>

@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // added useNavigate
-import AxiosInstance from "../components/AxiosInstance"; 
+import { useParams, useNavigate } from "react-router-dom"; 
+import axios from "axios";
 import '../styles/CostumeCalculator.css';
 
 const CostumeCalculator = () => {
   const { choreographyId } = useParams();
-  const navigate = useNavigate(); // initialize navigate
+  const navigate = useNavigate(); 
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [allPartsAvailable, setAllPartsAvailable] = useState(null);
   const [missingParts, setMissingParts] = useState([]);
   const [usersWithParts, setUsersWithParts] = useState([]);
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (!choreographyId) return;
@@ -21,69 +23,99 @@ const CostumeCalculator = () => {
         setLoading(true);
         setError(null);
 
-        const costumeCheckRes = await AxiosInstance.get(
-          `/Performance/GetCostumeChoreographyCheck/${choreographyId}`
+        const costumeCheckRes = await axios.get(
+          `https://localhost:7027/Performance/GetCostumeChoreographyCheck/${choreographyId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setAllPartsAvailable(costumeCheckRes.data.allPartsAvailable);
         setMissingParts(costumeCheckRes.data.missingParts);
 
-        const colaborativeRes = await AxiosInstance.get(
-          `/ColaborativeFiltering/GetUserWithCostumeParts/${choreographyId}`
+        const colaborativeRes = await axios.get(
+          `https://localhost:7027/ColaborativeFiltering/GetUserWithCostumeParts/${choreographyId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setUsersWithParts(Object.keys(colaborativeRes.data));
 
       } catch (err) {
-        setError(
-          err.response?.data?.message ||
-            "An error occurred while fetching data."
-        );
+        if (err.response?.status === 401) {
+          navigate("/login");
+        } else {
+          setError(
+            err.response?.data?.message || "An error occurred while fetching data."
+          );
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [choreographyId]);
+  }, [choreographyId, token, navigate]);
 
   if (loading) return <p>Loading data...</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+
+  const menParts = missingParts.filter(p => p.gender === "Men" && p.partNumber !== 0);
+  const womenParts = missingParts.filter(p => p.gender === "Women" && p.partNumber !== 0);
 
   return (
     <div className="calculator-container">
       <h1>Costume Parts Check for Choreography</h1>
 
       <div className="calculator-card">
-        {allPartsAvailable ? (
-          <h2>All required costume parts are available.</h2>
-        ) : (
+        {!allPartsAvailable && (
           <>
             <h2>Some costume parts are missing:</h2>
-            <ul>
-              {missingParts
-                ?.filter((part) => part.partNumber !== 0)
-                .map((part, index) => (
-                  <li key={index}>
-                    <p><b>Name:</b> {part.name}</p>
-                    <p><b>Quantity:</b> {part.partNumber}</p>
-                    <p><b>Gender:</b> {part.gender}</p>
-                  </li>
-                ))}
-            </ul>
+
+            {/* MEN CHECK */}
+            <div>
+              <h3>Men</h3>
+              {menParts.length > 0 ? (
+                <ul>
+                  {menParts.map((part, index) => (
+                    <li key={`men-${index}`}>
+                      <p><b>Name:</b> {part.name}</p>
+                      <p><b>Quantity:</b> {part.partNumber}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ fontStyle: "italic" }}>All Men costumes</p>
+              )}
+            </div>
+
+            {/* WOMEN CHECK */}
+            <div>
+              <h3>Women</h3>
+              {womenParts.length > 0 ? (
+                <ul>
+                  {womenParts.map((part, index) => (
+                    <li key={`women-${index}`}>
+                      <p><b>Name:</b> {part.name}</p>
+                      <p><b>Quantity:</b> {part.partNumber}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ fontStyle: "italic" }}>All Women costumes</p>
+              )}
+            </div>
           </>
         )}
 
-        {usersWithParts.length > 0 && (
-          <div>
-            <h2>Users Who Have the Needed Parts</h2>
+        <div>
+          <h2>Users with Needed Parts</h2>
+          {usersWithParts.length > 0 ? (
             <ul>
               {usersWithParts.map((email, idx) => (
                 <li key={idx}>{email}</li>
               ))}
             </ul>
-          </div>
-        )}
+          ) : (
+            <p>No users have the needed parts.</p>
+          )}
+        </div>
 
-        {/* Back to Home button */}
         <button onClick={() => navigate("/")}>Back to Home</button>
       </div>
     </div>

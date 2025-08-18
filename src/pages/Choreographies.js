@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AddChoreography from "../pages/AddChoreography";
 import "../styles/ChoreographiesCostume.css";
-import { FaTrash } from "react-icons/fa"; // Import trash icon
+import { FaTrash, FaEdit } from "react-icons/fa"; 
 
 const Choreographies = () => {
   const [choreographies, setChoreographies] = useState([]);
@@ -17,7 +17,13 @@ const Choreographies = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setChoreographies(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+      console.error(err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem("token"); 
+        navigate("/login");
+      }
+    });
   };
 
   useEffect(() => {
@@ -37,11 +43,58 @@ const Choreographies = () => {
       })
       .then((res) => {
         alert("Choreography deleted!");
-        fetchChoreographies(); // refresh list
+        fetchChoreographies(); 
+      })
+      .catch((err) => {
+      console.error(err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem("token"); 
+        navigate("/login"); 
+      }
+    });
+  };
+
+  const handleUpdateChoreography = async (e, choreography) => {
+    e.stopPropagation();
+
+    const newName = prompt("Enter new name:", choreography.name);
+    const newArea = prompt("Enter new area:", choreography.area);
+    const newMenCostumeCount = prompt("Enter new men costume count:", choreography.menCostumeCount);
+    const newWomenCostumeCount = prompt("Enter new women costume count:", choreography.womenCostumeCount);
+
+    if (
+      newName === null &&
+      newArea === null &&
+      newMenCostumeCount === null &&
+      newWomenCostumeCount === null
+    )
+      return;
+
+    const payload = {
+      name: newName || choreography.name,
+      area: newArea || choreography.area,
+      menCostumeCount: newMenCostumeCount || choreography.menCostumeCount,
+      womenCostumeCount: newWomenCostumeCount || choreography.womenCostumeCount
+    };
+
+    await axios
+      .put(
+        `https://localhost:7027/Choreography/UpdateChoreographyById/${choreography.id}`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        alert("Choreography updated!");
+        fetchChoreographies();
       })
       .catch((err) => {
         console.error(err);
-        alert("Failed to delete choreography.");
+        if (err.response && err.response.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        } else {
+          alert("Failed to update choreography.");
+        }
       });
   };
 
@@ -62,7 +115,19 @@ const Choreographies = () => {
               <p><strong>Men costumes:</strong> {ch.menCostumeCount}</p>
               <p><strong>Women costumes:</strong> {ch.womenCostumeCount}</p>
 
-              {/* Trash icon */}
+              <FaEdit
+                onClick={(e) => handleUpdateChoreography(e, ch)}
+                style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "40px",
+                color: "blue",
+                cursor: "pointer",
+                fontSize: "1.2rem",
+                }}
+                title="Edit Costume Part"
+              />
+
               <FaTrash
                 style={{
                   position: "absolute",
@@ -72,7 +137,7 @@ const Choreographies = () => {
                   cursor: "pointer",
                 }}
                 onClick={(e) => {
-                  e.stopPropagation(); // prevent triggering card click
+                  e.stopPropagation(); 
                   handleDeleteChoreography(ch.id);
                 }}
               />

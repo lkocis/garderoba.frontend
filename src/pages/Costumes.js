@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { FaTrash } from "react-icons/fa"; // <-- using FaTrash
+import { FaTrash, FaEdit } from "react-icons/fa"; 
 import AddCostume from "./AddCostume";
 import "../styles/Costumes.css";
 
@@ -12,8 +12,8 @@ const Costumes = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  const fetchCostumes = () => {
-    axios
+  const fetchCostumes = async () => {
+    await axios
       .get(`https://localhost:7027/Costume/GetAllCostumes/${userId}/${choreographyId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -30,8 +30,9 @@ const Costumes = () => {
   };
 
   const handleDeleteCostume = (e, costumeId) => {
-    e.stopPropagation(); // prevent triggering the click on the card
-    if (!window.confirm("Are you sure you want to delete this costume?")) return;
+    e.stopPropagation(); 
+    if (!window.confirm("Are you sure you want to delete this costume?")) 
+      return;
 
     axios
       .delete(`https://localhost:7027/Costume/DeleteCostumeWithParts/${costumeId}`, {
@@ -39,8 +40,57 @@ const Costumes = () => {
       })
       .then(() => fetchCostumes())
       .catch((err) => {
+      console.error(err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem("token"); 
+        navigate("/login"); 
+      }
+    });
+  };
+
+  const handleUpdateCostume = async (e, costume) => {
+    e.stopPropagation();
+
+    const newName = prompt("Enter new name:", costume.name);
+    const newArea = prompt("Enter new area:", costume.area);
+    const newStatus = prompt("Enter new status:", costume.status);
+    const newNecessaryParts = prompt("Enter new necessary parts:", costume.necessaryParts);
+
+    if (
+      newName === null &&
+      newArea === null &&
+      newStatus === null &&
+      newNecessaryParts == null
+    )
+      return;
+
+    const payload = {
+      name: newName || costume.name,
+      area: newArea || costume.area,
+      gender: costume.gender, 
+      status: newStatus || costume.status,
+      necessaryParts: costume.necessaryParts 
+    };
+
+    console.log("Updating costume with payload:", payload);
+    await axios
+      .post(
+        `https://localhost:7027/Costume/UpdateCostume/${costume.id}`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then(() => {
+        alert("Costume updated!");
+        fetchCostumes();
+      })
+      .catch((err) => {
         console.error(err);
-        alert("Failed to delete costume.");
+        if (err.response && err.response.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        } else {
+          alert("Failed to update costume. Costume status can be: AllAvailable or SomeMissing");
+        }
       });
   };
 
@@ -62,7 +112,19 @@ const Costumes = () => {
               <p><strong>Gender:</strong> {co.gender}</p>
               <p><strong>Status:</strong> {co.status}</p>
 
-              {/* Trash can icon */}
+              <FaEdit
+                onClick={(e) => handleUpdateCostume(e, co)}
+                style={{
+                position: "absolute",
+                bottom: "10px",
+                right: "40px",
+                color: "blue",
+                cursor: "pointer",
+                fontSize: "1.2rem",
+                }}
+                title="Edit Costume"
+              />
+              
               <FaTrash
                 onClick={(e) => handleDeleteCostume(e, co.id)}
                 style={{

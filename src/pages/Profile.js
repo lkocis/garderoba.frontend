@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { FaEdit } from 'react-icons/fa';  
 import '../styles/Profile.css';
 
 const Profile = () => {
@@ -7,6 +9,7 @@ const Profile = () => {
   const [error, setError] = useState(null);
 
   const userId = localStorage.getItem('userid');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userId) {
@@ -16,26 +19,37 @@ const Profile = () => {
 
     async function fetchUser() {
       try {
-        const token = localStorage.getItem('token'); 
+        const token = localStorage.getItem('token');
 
-        const response = await axios.get(`https://localhost:7027/User/ReadUser/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
+        const response = await axios.get(
+          `https://localhost:7027/User/ReadUser/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
           }
-        });
+        );
 
         setUser(response.data);
       } catch (err) {
-        const message = err.response?.data || err.message || 'Failed to fetch user data';
-        setError(message);
+        console.error(err);
+        if (err.response && err.response.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        } else {
+          const message =
+            err.response?.data || err.message || 'Failed to fetch user data';
+          setError(message);
+        }
       }
     }
 
     fetchUser();
-  }, [userId]);
+  }, [userId, navigate]);
 
   const updateUserInfo = async (fieldName) => {
-    const newValue = prompt(`Unesi novi podatak za ${fieldName}:`, user[fieldName]);
+    const newValue = prompt(
+      `Unesi novi podatak za ${fieldName}:`,
+      user[fieldName]
+    );
     if (newValue === null || newValue === user[fieldName]) return;
 
     try {
@@ -44,31 +58,35 @@ const Profile = () => {
       const payload = {
         ...user,
         id: userId,
-        [fieldName]: newValue
+        [fieldName]: newValue,
       };
 
       await axios.put(
         `https://localhost:7027/User/UpdateUserById/${userId}`,
         payload,
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      setUser(prevUser => ({
+      setUser((prevUser) => ({
         ...prevUser,
-        [fieldName]: newValue
+        [fieldName]: newValue,
       }));
     } catch (err) {
-      alert('Failed to update user info.');
+      console.error(err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem('token');
+        navigate('/login');
+      } else {
+        alert('Failed to update user info.');
+      }
     }
   };
 
   const logout = () => {
     localStorage.clear();
-    window.location.href = '/login'; 
+    navigate('/login');
   };
 
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -77,20 +95,16 @@ const Profile = () => {
   const renderEditableRow = (label, fieldName) => (
     <p>
       <strong>{label}:</strong> {user[fieldName]}{' '}
-      <span
-        style={{ cursor: 'pointer' }}
-        role="button"
-        aria-label={`Edit ${label}`}
+      <FaEdit
+        style={{ cursor: 'pointer', color: '#007bff' }}
         onClick={() => updateUserInfo(fieldName)}
         title={`Edit ${label}`}
-      >
-        ✏️
-      </span>
+      />
     </p>
   );
 
   return (
-    <div className='profile-container'>
+    <div className="profile-container">
       <h2>User Profile</h2>
       <div className="info-box">
         {renderEditableRow('Email', 'email')}

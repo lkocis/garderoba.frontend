@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Home from '../src/pages/Home';
 import Login from '../src/pages/Login';
 import Signup from '../src/pages/Signup';
@@ -11,18 +11,35 @@ import Costumes from './pages/Costumes';
 import CostumeParts from './pages/CostumeParts';
 import Performance from './pages/Performance';
 import CostumeCalculator from './pages/CostumeCalculator';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import AuthenticatedNavbar from './components/AuthenticatedNavbar';
-
+import axios from 'axios';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem('token');
+          setIsAuthenticated(false); 
+          navigate('/login'); 
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [navigate]);
 
   return (
     <>

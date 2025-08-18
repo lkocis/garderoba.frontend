@@ -31,7 +31,7 @@ const AddChoreography = ({ onAdded }) => {
         if (onAdded) onAdded(res.data); 
         setFormData({ name: "", area: "", menCostumeCount: 0, womenCostumeCount: 0 });
       })
-      .catch(() => setError("Greška prilikom dodavanja koreografije."));
+      .catch(() => setError("Error while fetching choreographies."));
   };
 
   return (

@@ -56,7 +56,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
       });
       setError("");
     } catch (err) {
-      setError("Greška prilikom dodavanja kostima.");
+      setError("Error while fetching costumes.");
     }
   };
 
@@ -78,7 +78,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         <label>
           Gender:
           <select name="gender" value={formData.gender} onChange={handleInputChange} required>
-            <option value="">Odaberi</option>
+            <option value="">Choose</option>
             <option value="0">Men</option>
             <option value="1">Women</option>
           </select>
@@ -88,7 +88,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         <label>
           Status:
           <select name="status" value={formData.status} onChange={handleInputChange} required>
-            <option value="">Odaberi</option>
+            <option value="">Choose</option>
             <option value="0">AllAvailable</option>
             <option value="1">SomeMissing</option>
           </select>
