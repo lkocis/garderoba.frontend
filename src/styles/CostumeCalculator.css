@@ -11,6 +11,8 @@
   background-position: center;
   background-repeat: no-repeat;
   color: white;
+  padding-top: 60px;
+    padding-bottom: 60px;
 }
 
 .calculator-container::before {

@@ -7,8 +7,17 @@ const Home = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+
+    // Ako nema tokena → ide na login
     if (!token) {
       navigate('/login');
+    } else {
+      // Provjeri da li je već refreshano u ovoj sesiji
+      const refreshed = sessionStorage.getItem('homeRefreshed');
+      if (!refreshed) {
+        sessionStorage.setItem('homeRefreshed', 'true');
+        window.location.reload(); // Hard reload
+      }
     }
   }, [navigate]);
 

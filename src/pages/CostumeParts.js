@@ -54,7 +54,7 @@ const CostumeParts = () => {
     const newName = prompt("Enter new name:", part.name);
     const newRegion = prompt("Enter new region:", part.region);
     const newPartNumber = prompt("Enter new part number:", part.partNumber);
-    const newStatus = prompt("Enter new status (int):", part.status);
+    const newStatus = prompt("Enter new status:", part.status);
 
     if (
       newName === null &&

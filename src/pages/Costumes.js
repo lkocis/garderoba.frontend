@@ -53,13 +53,11 @@ const Costumes = () => {
 
     const newName = prompt("Enter new name:", costume.name);
     const newArea = prompt("Enter new area:", costume.area);
-    const newStatus = prompt("Enter new status:", costume.status);
     const newNecessaryParts = prompt("Enter new necessary parts:", costume.necessaryParts);
 
     if (
       newName === null &&
       newArea === null &&
-      newStatus === null &&
       newNecessaryParts == null
     )
       return;
@@ -67,8 +65,7 @@ const Costumes = () => {
     const payload = {
       name: newName || costume.name,
       area: newArea || costume.area,
-      gender: costume.gender, 
-      status: newStatus || costume.status,
+      gender: costume.gender,
       necessaryParts: costume.necessaryParts 
     };
 
@@ -89,7 +86,7 @@ const Costumes = () => {
           localStorage.removeItem("token");
           navigate("/login");
         } else {
-          alert("Failed to update costume. Costume status can be: AllAvailable or SomeMissing");
+          alert("Failed to update costume. Gender can be: 'Men' or 'Women'.");
         }
       });
   };
@@ -110,7 +107,6 @@ const Costumes = () => {
               <p><strong>Name:</strong> {co.name}</p>
               <p><strong>Area:</strong> {co.area}</p>
               <p><strong>Gender:</strong> {co.gender}</p>
-              <p><strong>Status:</strong> {co.status}</p>
 
               <FaEdit
                 onClick={(e) => handleUpdateCostume(e, co)}

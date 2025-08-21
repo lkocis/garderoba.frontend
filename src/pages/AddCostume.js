@@ -5,8 +5,7 @@ const AddCostume = ({ onAdded, choreographyId }) => {
   const [formData, setFormData] = useState({
     name: "",
     area: "",
-    gender: "",       
-    status: "",       
+    gender: "",      
     necessaryParts: ""
   });
 
@@ -34,7 +33,6 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         name: formData.name,
         area: formData.area,
         gender: parseInt(formData.gender),
-        status: parseInt(formData.status),
         necessaryParts: formData.necessaryParts,
         choreographyId: choreographyId  
       };
@@ -50,7 +48,6 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         name: "",
         area: "",
         gender: "",
-        status: "",
         necessaryParts: "",
         choreographyId: ""
       });
@@ -81,16 +78,6 @@ const AddCostume = ({ onAdded, choreographyId }) => {
             <option value="">Choose</option>
             <option value="0">Men</option>
             <option value="1">Women</option>
-          </select>
-        </label>
-        <br /><br />
-
-        <label>
-          Status:
-          <select name="status" value={formData.status} onChange={handleInputChange} required>
-            <option value="">Choose</option>
-            <option value="0">AllAvailable</option>
-            <option value="1">SomeMissing</option>
           </select>
         </label>
         <br /><br />

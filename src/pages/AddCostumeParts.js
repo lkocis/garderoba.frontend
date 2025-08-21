@@ -48,7 +48,7 @@ const AddCostumeParts = ({ onAdded, costumeId }) => {
       });
       setError("");
     } catch (err) {
-      setError("Error while adding costume part.");
+      setError("Error while adding costume part. \nStatus can be: 'NeedsFixing' or 'Available'. \nGender can be: 'Men' or 'Women'.");
     }
   };
 
@@ -77,8 +77,8 @@ const AddCostumeParts = ({ onAdded, costumeId }) => {
           Status:
           <select name="status" value={formData.status} onChange={handleInputChange} required>
             <option value="">Choose</option>
-            <option value="0">AllAvailable</option>
-            <option value="1">SomeMissing</option>
+            <option value="0">Available</option>
+            <option value="1">NeedsFixing</option>
           </select>
         </label>
         
