@@ -23,8 +23,8 @@ const AddCostume = ({ onAdded, choreographyId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.gender || !formData.status) {
-      setError("Fill in necessary fields: name, sex and status.");
+    if (!formData.name || !formData.gender) {
+      setError("Fill in necessary fields: name, gender.");
       return;
     }
 
@@ -36,6 +36,9 @@ const AddCostume = ({ onAdded, choreographyId }) => {
         necessaryParts: formData.necessaryParts,
         choreographyId: choreographyId  
       };
+
+      console.log("Token being sent:", token);
+    console.log("Payload being sent:", payload);
 
       const response = await axios.post(
         "https://localhost:7027/Costume/CreateCostume",

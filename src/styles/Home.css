@@ -26,5 +26,20 @@
 .home-container > * {
   position: relative;
   z-index: 2;
-  
+}
+
+.home-container p {
+  font-size: 25px;
+  line-height: 1.6;
+  color: rgb(199, 199, 199);
+  max-width: 900px;
+  margin: 10px 0;
+}
+
+.home-container h3 {
+  font-size: 30px;
+  line-height: 1.6;
+  color: rgb(199, 199, 199);
+  max-width: 900px;
+  margin: 10px 0;
 }

@@ -11,7 +11,6 @@ const Navbar = () => {
         <img src={logo} alt="Logo" className="logo-image" />
       </div>
       <ul className="navbar-links">
-        <li><a onClick={() => navigate('/')}>Home</a></li>
         <li><a onClick={() => navigate('/login')}>Login</a></li>
         <li><a onClick={() => navigate('/signup')}>Sign up</a></li>
       </ul>
