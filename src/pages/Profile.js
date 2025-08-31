@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';  
 import '../styles/Profile.css';
 
-const Profile = () => {
+const Profile = ({onLogout}) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
@@ -84,9 +84,8 @@ const Profile = () => {
     }
   };
 
-  const logout = () => {
-    localStorage.clear();
-    navigate('/login');
+  const handleLogoutClick = () => {
+    onLogout();
   };
 
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -114,7 +113,7 @@ const Profile = () => {
         {renderEditableRow('Area', 'area')}
         {renderEditableRow('KUD Name', 'kudName')}
       </div>
-      <button onClick={logout}>Logout</button>
+      <button onClick={handleLogoutClick}>Logout</button>
     </div>
   );
 };

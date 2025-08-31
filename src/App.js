@@ -25,6 +25,13 @@ function App() {
     navigate('/');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    setIsAuthenticated(false);
+    navigate('/login');
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
@@ -35,11 +42,8 @@ function App() {
       (response) => response,
       (error) => {
         if (error.response && error.response.status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('userId');
-          setIsAuthenticated(false);
-
-          alert("Your session has expired. Reload this page and go to login.");
+          handleLogout();
+          alert("Your session has expired. Please log in again.");
         }
         return Promise.reject(error);
       }
@@ -52,18 +56,26 @@ function App() {
 
   return (
     <>
-      {isAuthenticated ? <AuthenticatedNavbar /> : <Navbar />}
+      {isAuthenticated ? (
+        <AuthenticatedNavbar onLogout={handleLogout} />
+      ) : (
+        <Navbar />
+      )}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login onAuth={handleAuth} />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile onLogout={handleLogout} />} />
         <Route path="/costumeComponents" element={<CostumeComponents />} />
         <Route path="/allChoreos" element={<Choreographies />} />
         <Route path="/costumes/:userId/:choreographyId" element={<Costumes />} />
         <Route path="/costumeParts/:userId/:costumeId" element={<CostumeParts />} />
         <Route path="/performance" element={<Performance />} />
-        <Route path="/costume-calculator/:userId/:choreographyId" element={<CostumeCalculator />} />
+        <Route
+          path="/costume-calculator/:userId/:choreographyId"
+          element={<CostumeCalculator />}
+        />
       </Routes>
     </>
   );
