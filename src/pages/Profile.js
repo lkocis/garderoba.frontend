@@ -8,7 +8,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
-  const userId = localStorage.getItem('userid');
+  const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
 
   useEffect(() => {

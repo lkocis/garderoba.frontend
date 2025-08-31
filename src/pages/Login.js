@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../assets/login-logo.png';
 
-const Login = () => {
+const Login = ({ onAuth }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -28,12 +28,10 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' }
       });
 
-      console.log('Login success:', response.data);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userid', response.data.userid);
+      onAuth(response.data.token, response.data.userid);
 
       navigate('/');
-      window.location.href = '/';
+
     } catch (error) {
       const message = error.response?.data || error.message || 'Invalid login credentials';
       setError(message);

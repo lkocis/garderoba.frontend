@@ -18,7 +18,7 @@ const Costumes = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => setCostumes(response.data))
-      .catch(() => setError("Greška prilikom dohvaćanja kostima."));
+      .catch(() => setError("Error while fetching costumes."));
   };
 
   useEffect(() => {

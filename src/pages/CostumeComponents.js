@@ -19,6 +19,12 @@ const CostumeComponents = () => {
             <p><strong>Men:</strong> Košulja, prsluk, hlače, čizme, šešir</p>
             <p><strong>Women:</strong> Rubina, pregača, oglavlje, papučke, čarape, dodaci</p>
           </div>
+
+          <div className="necessary-card">
+            <h3>Mađarska Podravina</h3>
+            <p><strong>Men:</strong> Košulja, prsluk, hlače, čizme, šešir</p>
+            <p><strong>Women:</strong> Suknja, pregača, bluza, oglavlje, čizme, dodaci</p>
+          </div>
         </div>
       </div>
     </div>

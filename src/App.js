@@ -18,6 +18,13 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
+  const handleAuth = (token, userId) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+    setIsAuthenticated(true);
+    navigate('/');
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
@@ -29,8 +36,10 @@ function App() {
       (error) => {
         if (error.response && error.response.status === 401) {
           localStorage.removeItem('token');
-          setIsAuthenticated(false); 
-          navigate('/login'); 
+          localStorage.removeItem('userId');
+          setIsAuthenticated(false);
+
+          alert("Your session has expired. Reload this page and go to login.");
         }
         return Promise.reject(error);
       }
@@ -39,14 +48,14 @@ function App() {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [navigate]);
+  }, []);
 
   return (
     <>
       {isAuthenticated ? <AuthenticatedNavbar /> : <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onAuth={handleAuth} />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/costumeComponents" element={<CostumeComponents />} />

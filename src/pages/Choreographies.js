@@ -8,7 +8,7 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 const Choreographies = () => {
   const [choreographies, setChoreographies] = useState([]);
   const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userid");
+  const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
   const fetchChoreographies = () => {

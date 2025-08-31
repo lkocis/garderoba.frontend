@@ -58,16 +58,19 @@ const CostumeCalculator = () => {
   const menParts = missingParts.filter(p => p.gender === "Men" && p.partNumber !== 0);
   const womenParts = missingParts.filter(p => p.gender === "Women" && p.partNumber !== 0);
 
-  return (
+    return (
     <div className="calculator-container">
       <h1>Costume Parts Check for Choreography</h1>
 
       <div className="calculator-card">
-        {!allPartsAvailable && (
+        {allPartsAvailable ? (
+          <p>
+            User has everything needed. All costume parts are available.
+          </p>
+        ) : (
           <>
             <h2>Some costume parts are missing:</h2>
 
-            {/* MEN CHECK */}
             <div>
               <h3>Men</h3>
               {menParts.length > 0 ? (
@@ -80,11 +83,10 @@ const CostumeCalculator = () => {
                   ))}
                 </ul>
               ) : (
-                <p style={{ fontStyle: "italic" }}>All Men costumes</p>
+                <p style={{ fontStyle: "italic" }}>All Men costumes available</p>
               )}
             </div>
 
-            {/* WOMEN CHECK */}
             <div>
               <h3>Women</h3>
               {womenParts.length > 0 ? (
@@ -97,7 +99,7 @@ const CostumeCalculator = () => {
                   ))}
                 </ul>
               ) : (
-                <p style={{ fontStyle: "italic" }}>All Women costumes</p>
+                <p style={{ fontStyle: "italic" }}>All Women costumes available</p>
               )}
             </div>
           </>
@@ -105,20 +107,22 @@ const CostumeCalculator = () => {
 
         <div>
           <h2>Users with Needed Parts</h2>
-          {usersWithParts.length > 0 ? (
+          {allPartsAvailable ? (
+            <p style={{ fontStyle: "italic" }}>No users needed — all parts are available.</p>
+          ) : usersWithParts.length > 0 ? (
             <ul>
               {usersWithParts.map((email, idx) => (
                 <li key={idx}>{email}</li>
               ))}
             </ul>
           ) : (
-            <p>No users have the needed parts.</p>
+            <p style={{ fontStyle: "italic" }}>No users found with needed parts.</p>
           )}
         </div>
 
-        <button onClick={() => navigate("/")}>Back to Home</button>
+          <button onClick={() => navigate("/")}>Back to Home</button>
+        </div>
       </div>
-    </div>
   );
 };
 
